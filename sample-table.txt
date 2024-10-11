@@ -1,0 +1,7 @@
+const Totall = () => {
+  const totalPrice = allProducts.reduce((accumulator, product) => {
+    return accumulator + product.Price * product.Quantity; // Multiply by Quantity to get total price for that product
+  }, 0);
+  setTotal(totalPrice);
+  console.log(totalPrice); // For debugging
+};
