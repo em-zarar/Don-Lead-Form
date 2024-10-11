@@ -8,8 +8,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStickyNote } from "@fortawesome/free-regular-svg-icons";
 
 // -----import Components------
+import HeaderTitle from '../components/common/HeaderTitle'
 import Navbar from "./common/Navbar";
 import DynamicDropdown from "./common/DynamicDropdown";
+
 
 function LeadForm() {
   // ------Drop Down Data-----
@@ -38,15 +40,7 @@ function LeadForm() {
   return (
     <div className="bg-img">
       <Navbar />
-      <div className="flex items-center justify-center md:justify-around mt-8 font-poppins">
-        <div className="hidden md:block">
-          <img src="./asset/images/form-logo.png" alt="logo" />
-        </div>
-        <div className="text-[29px] md:text-4xl  text-[#3B3F8B] font-semibold font-poppins mx-24">
-          Lead Form
-        </div>
-        <div></div>
-      </div>
+      <HeaderTitle title={"Lead Form"}/>
 
       {/* ---------Form--------------- */}
 

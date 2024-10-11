@@ -2,30 +2,38 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 // -----import Components------
+
 import Navbar from "./common/Navbar";
 import DynamicDropdown from "./common/QuotationDropdown";
+import DynamicDropdown2 from "./common/DynamicDropdown";
+
 //-------import PopUp--------
 import Swal from "sweetalert2";
-
+import { AiOutlineClose } from "react-icons/ai";
 import { Calendar } from "primereact/calendar";
 
 function QuotationForm() {
+
   // ------Drop Down Data-----
   const productsOptions = [
     {
       PName: "LG C2 42 (106c m) 4K Smart",
       Manufacture: "Clear Solution",
-      Price: 60,
+      Price: 60.7,
     },
     {
       PName: "LG Smart TV 8K",
       Manufacture: "Clear Solution",
-      Price: 23,
+      Price: 223.5,
     },
   ];
+
+   const leadsTypeOptions = ["Assistant"];
+   const templateTypeOptions = ["Web Project template"];
+
+   
   //-----------States----------------
 
-  const [activeIndex, setActiveIndex] = useState();
   const [count, setCount] = useState(0);
   const [allProducts, setAllProducts] = useState([]);
   const [total, setTotal] = useState(0);
@@ -35,23 +43,54 @@ function QuotationForm() {
     value: index,
   }));
 
+  // -----useForm Hook---------
+
   const {
-    setValue,
-    handleSubmit,
-    control,
-    formState: { errors },
-    reset,
+    setValue:quoteSetValue,
+    handleSubmit:quoteSubmit,
+    control:quoteControl,
+    formState: { errors:quoteErrors }, 
+    reset:quoteReset
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(count);
+  const {
+    setValue:prodSetValue,
+    register: prodRegister,
+    handleSubmit: prodSubmit,
+    control: prodControl,
+    formState: { errors:prodErrors },
+    watch, 
+    reset:prodReset
+  } = useForm({defaultValues: {
+    leadStatus: '',
+    desiredDate: null,
+    rushFee: '',
+    projectTemplate: '',
+  },});
+
+  // --------OnSubmit---------------
+
+  const onProductSubmit = (data) => {
+    console.log("Product Data Submitted:", data);
+    Swal.fire({
+      title: "Success",
+      text: "Product form submitted successfully!",
+      icon: "success",
+    });
+    prodReset();
+  };
+  
+  const onQuoteSubmit = (data) => {
+ 
     if (count === 0) {
       Swal.fire({
         icon: "error",
         title: "Oops...",
         text: "Product Quantity cannot be zero!",
       });
-    } else {
+      return;
+    } 
+
       const selectedProductIndex = data.selectProduct;
       const selectedProduct = productsOptions[selectedProductIndex];
 
@@ -67,20 +106,12 @@ function QuotationForm() {
         text: "Form Submitted Successfully",
         icon: "success",
       });
-      reset();
+      quoteReset();
       setCount(0);
-    }
+    
   };
 
-  // ----------Drop Down Data--------
-  const leads = ["Assistant"];
-  const template = ["Web Project template"];
-
-  // -------handleClick--------------
-
-  // const handleClick = (index) => {
-  //   setActiveIndex(index);
-  // };
+  // -------Counter---------------
 
   const handleAdd = () => {
     setCount((prevCount) => prevCount + 1);
@@ -97,13 +128,12 @@ function QuotationForm() {
   // -------handleQunatity------------
 
   const handleAddProduct = (e) => {
-    setValue("Qty", count);
+    quoteSetValue("Qty", count);
   };
 
   // -------handleRemove------------
 
   const handleDelete = (index) => {
-    console.log(index);
     const deletedProduct = allProducts.filter((_, i) => i !== index);
     setAllProducts(deletedProduct);
     Swal.fire({
@@ -112,6 +142,8 @@ function QuotationForm() {
       icon: "success",
     });
   };
+  
+
   // ------------Total Price----------------
 
   useEffect(() => {
@@ -127,16 +159,19 @@ function QuotationForm() {
 
   return (
     <div className="bg-img">
+
+      {/* ----Navbar--- */}
       <Navbar />
+
       <div className="flex items-center justify-around mt-8 font-poppins">
-        <div className="hidden md:block">
+        <div className="w-[23%]">
           <img src="./asset/images/form-logo.png" alt="" />
         </div>
-        <div className="text-[29px] md:text-4xl text-[#3B3F8B] font-semibold font-poppins mx-0 md:mx-24">
+        <div className="text-[24px] md:text-4xl text-[#3B3F8B] font-semibold font-poppins mx-0 md:mx-24">
           Quote Form
         </div>
         <div>
-          <button className="bg-[#1B1C3F] text-white rounded-[20px] py-[10px] px-8 text-[17px]">
+          <button className="bg-[#1B1C3F] text-white rounded-[20px] py-2 md:py-[10px] px-2 md:px-8  text-[12px] md:text-[17px]">
             <span className="mr-1">+</span>
             <span>Add Quote</span>
           </button>
@@ -144,7 +179,8 @@ function QuotationForm() {
       </div>
 
       {/* -----select lead------- */}
-      <form onSubmit={handleSubmit(onSubmit)}>
+
+      <form onSubmit={quoteSubmit(onQuoteSubmit)}>
         <div className="flex flex-col md:flex-row items-start md:items-end justify-start mt-16 px-6 md:px-20 font-poppins gap-5 md:gap-12">
           <div className=" w-full md:w-2/4">
             <label htmlFor="" className="heading-style icon">
@@ -161,13 +197,13 @@ function QuotationForm() {
                   className=""
                   name="selectProduct"
                   options={dropdownOptions}
-                  control={control}
+                  control={quoteControl}
                   placeholder="Select..."
                   required
                 />
                 <div className="selectProduct">
                   <p className="error">
-                    {errors.selectProduct && <span>State is required</span>}
+                    {quoteErrors.selectProduct && <span>Product is required</span>}
                   </p>
                 </div>
               </div>
@@ -203,9 +239,12 @@ function QuotationForm() {
           </div>
         </div>
       </form>
+
       {/* -------Detail show Box----- */}
 
-      <div className="bg-[#F5F5F5] p-6 md:p-10 m-6 md:m-16 mb-10 rounded-3xl shadow-quote-shadow font-poppins para">
+    {
+      allProducts?.map((prod, index) =>(
+        <div className="bg-[#F5F5F5] p-6 md:p-10 m-6 md:m-16 mb-10 rounded-3xl shadow-quote-shadow font-poppins para">
         <div className="flex items-center mb-2">
           <h3 className="h3">Brand :</h3>
           <p>CS Labor - Q</p>
@@ -219,7 +258,7 @@ function QuotationForm() {
           <p>Only 2 in Stock</p>
         </div>
         <h2 className="text-3xl my-3 font-medium ">
-          LG C2 42 (106c m) 4K Smart OLED evo TV | WebOS | Cinema HDR
+          {prod.PName}
         </h2>
         <hr className="border-1.9 border-slate-400 w-2/4 mb-3" />
         <ul>
@@ -253,13 +292,16 @@ function QuotationForm() {
         </ul>
         <hr className="border-1.9 border-slate-400 w-2/4 mb-3" />
         <div className="text-sm">USD(incl. of all taxes)</div>
-        <h2 className="text-3xl mt-3 font-medium ">$600.72</h2>
+        <h2 className="text-3xl mt-3 font-medium ">${prod.Price}</h2>
       </div>
+      ))
+    }
+      
 
       {/* ------Product Table--------- */}
     {
       allProducts.length <= 0 ? 
-     <div className="heading-style text-center pb-8">Add Products</div>
+     <div className="heading-style text-center pb-8 pt-8">Add Products</div>
       :
       <div className="bg-[#F5F5F5] px-6 md:px-10 pt-10 mx-6 md:mx-24 rounded-3xl shadow-quote-shadow font-poppins">
         <div className="w-full ">
@@ -322,13 +364,13 @@ function QuotationForm() {
                   <td className="p-4">
                     <p className="block text-sm">{prod.Quantity}</p>
                   </td>
-                  <td className="p-4">
+                  <td className="p-4 flex justify-center items-center">
                     <button
                       type="submit"
                       className="block text-sm"
                       onClick={() => handleDelete(index)}
                     >
-                      X
+                      <AiOutlineClose className="text-[17px] font-extrabold"/>
                     </button>
                   </td>
                 </tr>
@@ -348,67 +390,61 @@ function QuotationForm() {
 
       {/* Product and Deliveries */}
 
-      {/* <form className=" pt-10 mx-6 md:mx-24 font-poppins mb-24" onSubmit={handleSubmit}>
+      <form className=" pt-10 mx-6 md:mx-24 font-poppins mb-24" onSubmit={prodSubmit(onProductSubmit)}>
         <div className="flex justify-start flex-wrap mb-10">
-        <Dropdown
-            className={`input-style text-gray-400 ${
-              activeIndex === 2 ? "active" : ""
-            }`}
-            value={formData.leadStatus}
-            onChange={(e) =>
-              setFormData((prevState) => ({
-                ...prevState,
-                leadStatus: e.value,
-              }))
-            }
-            onClick={() => handleClick(2)}
-            options={leads.map((e) => ({ name: e }))}
-            optionLabel="name"
-            placeholder="Lead Status"
-          />
-          <Calendar
-            className={`input-style text-gray-400 ${
-              activeIndex === 3 ? "active" : ""
-            }`}
-            value={formData.desiredDate}
-            onChange={(e) =>
-              setFormData((prevState) => ({
-                ...prevState,
-                desiredDate: e.value,
-              }))
-            }
-            onClick={() => handleClick(3)}
-            type="date"
-            name="desiredDate"
-            placeholder="Desire to Have"
-          />
-          <input
-            className="input-style "
-            type="number"
-            name="rushFee"
-            placeholder="Rush Fee"
-            value={formData.rushFee}
-            onChange={handleChange}
-          />
-           <Dropdown
-            className={`input-style text-gray-400 ${
-              activeIndex === 4 ? "active" : ""
-            }`}
-            value={formData.projectTemplate}
-            onChange={(e) =>
-              setFormData((prevState) => ({
-                ...prevState,
-                projectTemplate: e.value,
-              }))
-            }
-            onClick={() => handleClick(4)}
-            options={template.map((e) => ({ name: e }))}
-            optionLabel="name"
-            placeholder="Select Project Template"
-          />
+
+        <div className="flex flex-col mr-0 md:mr-7">
+            <DynamicDropdown2
+              name="leadStatus"
+              options={leadsTypeOptions}
+              control={prodControl}
+              placeholder="Lead Status"
+              required
+            />
+            <p className="error">
+              {prodErrors.leadStatus && <span>Lead Status is required</span>}
+            </p>
+          </div>
+
+          <div className="flex flex-col mr-0 md:mr-7">
+            <Calendar
+              className={`input-style text-gray-400`}
+              value={watch('desiredDate')}
+              onChange={(e) => prodSetValue('desiredDate', e.value)}
+              placeholder="Desire to Have"
+            />
+            <p className="error">
+              {prodErrors.desiredDate && <span>{errors2.desiredDate.message}</span>}
+            </p>
+          </div>
+
+
+          <div className="flex flex-col mr-0 md:mr-7">
+            <input
+              className="input-style"
+              type="number"
+              {...prodRegister("rushFee", { required: "Rush Fee is Required" })}
+              placeholder="Rush Fee"
+            />
+            <p className="error">{prodErrors.rushFee?.message}</p>
+          </div>
+          
+          <div className="flex flex-col mr-0 md:mr-7">
+            <DynamicDropdown2
+              name="projectTemplate"
+              options={templateTypeOptions}
+              control={prodControl}
+              placeholder="Select Project Template"
+              required
+            />
+            <p className="error">
+              {prodErrors.projectTemplate && <span>Project Template is required</span>}
+            </p>
+          </div>
+
         </div>
-        <button className="button-style mb-20">Proceed</button>
-      </form> */}
+        <button type="submit"  className="button-style mb-20">Proceed</button>
+      </form>
     </div>
   );
 }
