@@ -37,6 +37,7 @@ function QuotationForm() {
   const [count, setCount] = useState(0);
   const [allProducts, setAllProducts] = useState([]);
   const [total, setTotal] = useState(0);
+  const [dropdownSelectedProduct, setDropdownSelectedProduct] = useState({});
 
   const dropdownOptions = productsOptions.map((prod, index) => ({
     label: prod.PName,
@@ -80,7 +81,7 @@ function QuotationForm() {
     prodReset();
   };
   
-  const onQuoteSubmit = (data) => {
+  const onQuoteSubmit = () => {
  
     if (count === 0) {
       Swal.fire({
@@ -91,26 +92,27 @@ function QuotationForm() {
       return;
     } 
 
-      const selectedProductIndex = data.selectProduct;
-      const selectedProduct = productsOptions[selectedProductIndex];
-
-      const productToAdd = {
-        ...selectedProduct,
+      const productToAdd = dropdownSelectedProduct.map(prod => ({
+        ...prod,         
         Quantity: count,
-      };
-
-      setAllProducts((prev) => [...prev, productToAdd]);
+      }));
+      setAllProducts((prev) => [...prev, ...productToAdd]);
+  
 
       Swal.fire({
         title: "Success",
-        text: "Form Submitted Successfully",
+        text: "Added Successfully",
         icon: "success",
       });
-      quoteReset();
       setCount(0);
     
   };
+  // -------OnChange-------------
 
+  const handleOnChange = (selectedValue) => {
+    setDropdownSelectedProduct(productsOptions?.filter((_, i) => i === selectedValue));
+  };
+  
   // -------Counter---------------
 
   const handleAdd = () => {
@@ -199,6 +201,7 @@ function QuotationForm() {
                   options={dropdownOptions}
                   control={quoteControl}
                   placeholder="Select..."
+                  onChange={handleOnChange}
                   required
                 />
                 <div className="selectProduct">
@@ -242,9 +245,9 @@ function QuotationForm() {
 
       {/* -------Detail show Box----- */}
 
-    {
-      allProducts?.map((prod, index) =>(
-        <div className="bg-[#F5F5F5] p-6 md:p-10 m-6 md:m-16 mb-10 rounded-3xl shadow-quote-shadow font-poppins para">
+    { 
+    dropdownSelectedProduct.length > 0 && dropdownSelectedProduct.map((prod , index) =>(
+        <div className="bg-[#F5F5F5] p-6 md:p-10 m-6 md:m-16 mb-10 rounded-3xl shadow-quote-shadow font-poppins para" key={index}>
         <div className="flex items-center mb-2">
           <h3 className="h3">Brand :</h3>
           <p>CS Labor - Q</p>
@@ -299,9 +302,61 @@ function QuotationForm() {
       
 
       {/* ------Product Table--------- */}
+      
     {
       allProducts.length <= 0 ? 
-     <div className="heading-style text-center pb-8 pt-8">Add Products</div>
+      <div className="bg-[#F5F5F5] px-6 md:px-10 pt-10 mx-6 md:mx-24 rounded-3xl shadow-quote-shadow font-poppins">
+      <div className="w-full ">
+        <label htmlFor="" className="heading-style icon">
+          <img
+            src="./asset/images/icon/pro-icon.png"
+            style={{ width: "22px" }}
+            alt=""
+          />
+          Products
+        </label>
+      </div>
+      <div className="relative flex flex-col w-full h-full overflow-scroll  bg-clip-border">
+        <table className="w-full text-left table-auto min-w-max text-center border-collapse font-poppins">
+          <thead className="bg-[#3B3F8B] text-white ">
+            <tr>
+              <th className="p-4 ">
+                <p className="block text-sm font-normal leading-none">Sr</p>
+              </th>
+              <th className="p-4 ">
+                <p className="block text-sm font-normal leading-none">
+                  Product Name
+                </p>
+              </th>
+              <th className="p-4 ">
+                <p className="block text-sm font-normal leading-none">
+                  Manufacture
+                </p>
+              </th>
+              <th className="p-4 ">
+                <p className="block text-sm font-normal leading-none">
+                  Price
+                </p>
+              </th>
+              <th className="p-4 ">
+                <p className="block text-sm font-normal leading-none">Qty</p>
+              </th>
+              <th className="p-4 ">
+                <p className="block text-sm font-normal leading-none">
+                  Action
+                </p>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="">
+              <td colSpan="6" className="text-xl text-center pt-12 pb-12">No Product</td>
+            </tr>
+          </tbody>
+          
+        </table>
+      </div>
+    </div>
       :
       <div className="bg-[#F5F5F5] px-6 md:px-10 pt-10 mx-6 md:mx-24 rounded-3xl shadow-quote-shadow font-poppins">
         <div className="w-full ">
@@ -374,15 +429,19 @@ function QuotationForm() {
                     </button>
                   </td>
                 </tr>
+                <tr>
+                  <td colSpan="6">
+                  <div className="flex justify-end items-center mt-4 mb-4">
+                    <div className="text-[#3B3F8B] font-semibold text-xl">
+                      Grand Total :
+                    </div>
+                    <p className="font-medium text-2xl">${Math.round(total)}</p>
+                  </div>
+                  </td>
+                </tr>
               </tbody>
             ))}
           </table>
-          <div className="flex items-center justify-end w-full mt-4 mb-4">
-            <div className="text-[#3B3F8B] font-semibold text-xl">
-              Grand Total :
-            </div>
-            <p className="font-medium text-xl">${total}</p>
-          </div>
         </div>
       </div>
     }
