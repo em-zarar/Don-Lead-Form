@@ -350,7 +350,7 @@ function QuotationForm() {
           </thead>
           <tbody>
             <tr className="">
-              <td colSpan="6" className="text-xl text-center pt-12 pb-12">No Product</td>
+              <td colspan="6" className="text-xl text-center pt-12 pb-12">No Product</td>
             </tr>
           </tbody>
           
@@ -429,19 +429,15 @@ function QuotationForm() {
                     </button>
                   </td>
                 </tr>
-                <tr>
-                  <td colSpan="6">
-                  <div className="flex justify-end items-center mt-4 mb-4">
-                    <div className="text-[#3B3F8B] font-semibold text-xl">
-                      Grand Total :
-                    </div>
-                    <p className="font-medium text-2xl">${Math.round(total)}</p>
-                  </div>
-                  </td>
-                </tr>
               </tbody>
             ))}
           </table>
+          <div className="mt-4 mb-4 text-end">
+            <div className="text-[#3B3F8B] font-semibold text-xl">
+              Grand Total :
+            </div>
+            <p className="font-medium text-xl">${Math.round(total)}</p>
+          </div>
         </div>
       </div>
     }
