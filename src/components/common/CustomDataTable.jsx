@@ -177,7 +177,7 @@ function CustomDataTable({
   const paginatedCustomers = customers.slice(first, first + rows);
 
   return (
-    <div className="mb-2 border-2 border-transparent">
+    <div className="border-2 border-transparent">
       <div className="shadow-custom-shadow mt-6 md:mt-14 bg-white px-4 md:px-8 font-poppins rounded-xl">
         <div className="">
           {header}
