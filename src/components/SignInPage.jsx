@@ -27,8 +27,7 @@ function SignInPage() {
 
   return (
     <div
-      style={{}}
-      className="h-screen flex flex-col sm:flex-row justify-center items-center w-full"
+      className="h-screen flex flex-col sm:flex-row justify-center items-center w-full bg-white"
     >
       <div className="h-full flex  justify-center items-center w-full  sm:w-2/4  ">
         <div className="signup-page-image">

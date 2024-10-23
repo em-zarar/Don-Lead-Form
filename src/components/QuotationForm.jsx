@@ -438,7 +438,7 @@ function QuotationForm() {
 
       {/* Product and Deliveries */}
 
-      <form className=" pt-10 mx-6 md:mx-24 font-poppins mb-24" onSubmit={prodSubmit(onProductSubmit)}>
+      <form className=" pt-10 mx-6 md:mx-24 font-poppins" onSubmit={prodSubmit(onProductSubmit)}>
         <div className="flex justify-start flex-wrap mb-10">
 
         <div className="flex flex-col mr-0 md:mr-7">
