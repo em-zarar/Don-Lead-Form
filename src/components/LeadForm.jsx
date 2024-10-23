@@ -52,7 +52,7 @@ function LeadForm() {
 
         <label className="heading-style icon">
           <img
-            src="./asset/images/icon/per-icon.png"
+            src="./images/icon/per-icon.png"
             style={{ width: "22px" }}
             alt=""
           />
@@ -96,7 +96,7 @@ function LeadForm() {
 
         <label className="heading-style icon">
           <img
-            src="./asset/images/icon/bus-icon.png"
+            src="./images/icon/bus-icon.png"
             style={{ width: "22px" }}
             alt=""
           />
@@ -132,7 +132,7 @@ function LeadForm() {
 
         <label className="heading-style icon">
           <img
-            src="./asset/images/icon/loc-icon.png"
+            src="./images/icon/loc-icon.png"
             style={{ width: "22px" }}
             alt=""
           />
@@ -191,7 +191,7 @@ function LeadForm() {
 
         <label className="heading-style icon">
           <img
-            src="./asset/images/icon/con-icon.png"
+            src="./images/icon/con-icon.png"
             style={{ width: "22px" }}
             alt=""
           />
@@ -270,7 +270,7 @@ function LeadForm() {
         </label>
         <div className="flex flex-col mr-0 md:mr-7">
           <textarea
-            className="input-style w-full md:w-4/5 h-[205px]"
+            className="input-style w-full  h-[205px]"
             {...register("note")}
             placeholder="Type here..."
           />

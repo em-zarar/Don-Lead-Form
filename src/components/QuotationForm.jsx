@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef  } from "react";
 import { useForm } from "react-hook-form";
 
 // -----import Components------
@@ -9,10 +9,16 @@ import DynamicDropdown2 from "./common/DynamicDropdown";
 
 //-------import PopUp--------
 import Swal from "sweetalert2";
+// -----import icon
 import { AiOutlineClose } from "react-icons/ai";
 import { Calendar } from "primereact/calendar";
+import { AiOutlineCalendar } from 'react-icons/ai';
+import HeaderTitle from "./common/HeaderTitle";
+
 
 function QuotationForm() {
+
+  const productTableRef = useRef();
 
   // ------Drop Down Data-----
   const productsOptions = [
@@ -29,7 +35,7 @@ function QuotationForm() {
   ];
 
    const leadsTypeOptions = ["Assistant"];
-   const templateTypeOptions = ["Web Project template"];
+   const templateTypeOptions = ["Web Project Template"];
 
    
   //-----------States----------------
@@ -82,7 +88,7 @@ function QuotationForm() {
   };
   
   const onQuoteSubmit = () => {
- 
+  
     if (count === 0) {
       Swal.fire({
         icon: "error",
@@ -96,17 +102,24 @@ function QuotationForm() {
         ...prod,         
         Quantity: count,
       }));
+      
+      if (productTableRef.current) {
+        productTableRef.current.scrollIntoView({ behavior: "smooth" });
+      }
       setAllProducts((prev) => [...prev, ...productToAdd]);
+      setCount(0); 
+      setTimeout(() => {
+        Swal.fire({
+          title: "Success",
+          text: "Added Successfully",
+          icon: "success",
+        });
+      }, 500); 
+      
+  };
+
   
 
-      Swal.fire({
-        title: "Success",
-        text: "Added Successfully",
-        icon: "success",
-      });
-      setCount(0);
-    
-  };
   // -------OnChange-------------
 
   const handleOnChange = (selectedValue) => {
@@ -164,21 +177,7 @@ function QuotationForm() {
 
       {/* ----Navbar--- */}
       <Navbar />
-
-      <div className="flex items-center justify-around mt-8 font-poppins">
-        <div className="w-[23%]">
-          <img src="./asset/images/form-logo.png" alt="" />
-        </div>
-        <div className="text-[24px] md:text-4xl text-[#3B3F8B] font-semibold font-poppins mx-0 md:mx-24">
-          Quote Form
-        </div>
-        <div>
-          <button className="bg-[#1B1C3F] text-white rounded-[20px] py-2 md:py-[10px] px-2 md:px-8  text-[12px] md:text-[17px]">
-            <span className="mr-1">+</span>
-            <span>Add Quote</span>
-          </button>
-        </div>
-      </div>
+      <HeaderTitle title={"Add Quote"}/>
 
       {/* -----select lead------- */}
 
@@ -187,16 +186,16 @@ function QuotationForm() {
           <div className=" w-full md:w-2/4">
             <label htmlFor="" className="heading-style icon">
               <img
-                src="./asset/images/icon/pro-icon.png"
+                src="./images/icon/pro-icon.png"
                 style={{ width: "22px" }}
                 alt=""
               />
               Select Lead
             </label>
             <div className="flex justify-start flex-wrap">
-              <div className="flex flex-col !w-full !md:w-full mt-2 mr-0">
+              <div className="flex flex-col !w-full !md:w-full mt-2  mr-0">
                 <DynamicDropdown
-                  className=""
+                  className="outline-none hover:outline-none"
                   name="selectProduct"
                   options={dropdownOptions}
                   control={quoteControl}
@@ -295,7 +294,7 @@ function QuotationForm() {
         </ul>
         <hr className="border-1.9 border-slate-400 w-2/4 mb-3" />
         <div className="text-sm">USD(incl. of all taxes)</div>
-        <h2 className="text-3xl mt-3 font-medium ">${prod.Price}</h2>
+        <h2 className="text-3xl mt-3 font-medium ">${Math.round(prod.Price)}</h2>
       </div>
       ))
     }
@@ -305,72 +304,66 @@ function QuotationForm() {
       
     {
       allProducts.length <= 0 ? 
-      <div className="bg-[#F5F5F5] px-6 md:px-10 pt-10 mx-6 md:mx-24 rounded-3xl shadow-quote-shadow font-poppins">
+      <div ref={productTableRef} className="bg-[#F5F5F5] px-6 md:px-10 pt-10 mx-6 md:mx-24 rounded-3xl shadow-quote-shadow font-poppins">
       <div className="w-full ">
         <label htmlFor="" className="heading-style icon">
           <img
-            src="./asset/images/icon/pro-icon.png"
+            src="./images/icon/pro-icon.png"
             style={{ width: "22px" }}
             alt=""
           />
           Products
         </label>
       </div>
-      <div className="relative flex flex-col w-full h-full overflow-scroll  bg-clip-border">
+      <div className="relative flex flex-col w-full h-full overflow-scroll md:overflow-hidden bg-clip-border">
+    
         <table className="w-full text-left table-auto min-w-max text-center border-collapse font-poppins">
-          <thead className="bg-[#3B3F8B] text-white ">
+          <thead className="bg-[#3B3F8B] text-white">
             <tr>
-              <th className="p-4 ">
+              <th className="p-4">
                 <p className="block text-sm font-normal leading-none">Sr</p>
               </th>
-              <th className="p-4 ">
-                <p className="block text-sm font-normal leading-none">
-                  Product Name
-                </p>
+              <th className="p-4">
+                <p className="block text-sm font-normal leading-none">Product Name</p>
               </th>
-              <th className="p-4 ">
-                <p className="block text-sm font-normal leading-none">
-                  Manufacture
-                </p>
+              <th className="p-4">
+                <p className="block text-sm font-normal leading-none">Manufacture</p>
               </th>
-              <th className="p-4 ">
-                <p className="block text-sm font-normal leading-none">
-                  Price
-                </p>
+              <th className="p-4">
+                <p className="block text-sm font-normal leading-none">Price</p>
               </th>
-              <th className="p-4 ">
+              <th className="p-4">
                 <p className="block text-sm font-normal leading-none">Qty</p>
               </th>
-              <th className="p-4 ">
-                <p className="block text-sm font-normal leading-none">
-                  Action
-                </p>
+              <th className="p-4">
+                <p className="block text-sm font-normal leading-none">Action</p>
               </th>
             </tr>
           </thead>
           <tbody>
-            <tr className="">
-              <td colspan="6" className="text-xl text-center pt-12 pb-12">No Product</td>
+            <tr>
+              <td colSpan="6" className="text-xl text-center pt-12 pb-12">No Product</td>
             </tr>
           </tbody>
-          
         </table>
+
+
       </div>
     </div>
       :
-      <div className="bg-[#F5F5F5] px-6 md:px-10 pt-10 mx-6 md:mx-24 rounded-3xl shadow-quote-shadow font-poppins">
+      <div  className="bg-[#F5F5F5] px-6 md:px-10 pt-10 mx-6 md:mx-24 rounded-3xl shadow-quote-shadow font-poppins">
         <div className="w-full ">
           <label htmlFor="" className="heading-style icon">
             <img
-              src="./asset/images/icon/pro-icon.png"
+              src="./images/icon/pro-icon.png"
               style={{ width: "22px" }}
               alt=""
             />
             Products
           </label>
         </div>
-        <div className="relative flex flex-col w-full h-full overflow-scroll  bg-clip-border">
-          <table className="w-full text-left table-auto min-w-max text-center border-collapse font-poppins">
+        <div className="relative flex flex-col w-full h-full overflow-scroll md:overflow-hidden bg-clip-border">
+          <table className="w-full text-left table-auto min-w-max text-center font-poppins">
             <thead className="bg-[#3B3F8B] text-white ">
               <tr>
                 <th className="p-4 ">
@@ -432,11 +425,11 @@ function QuotationForm() {
               </tbody>
             ))}
           </table>
-          <div className="mt-4 mb-4 text-end">
+          <div className=" mt-4 mb-4 text-end">
             <div className="text-[#3B3F8B] font-semibold text-xl">
-              Grand Total :
+              Grand Total : <span className="font-medium text-black text-xl">${Math.round(total)}</span>
             </div>
-            <p className="font-medium text-xl">${Math.round(total)}</p>
+            
           </div>
         </div>
       </div>
@@ -461,9 +454,12 @@ function QuotationForm() {
             </p>
           </div>
 
-          <div className="flex flex-col mr-0 md:mr-7">
+          <div className="flex flex-col mr-0 md:mr-7 relative">
+            <span className="absolute right-3 top-[57%] z-10 transform -translate-y-1/2">
+              <AiOutlineCalendar className="text-[#A4A4A4]" />
+            </span>
             <Calendar
-              className={`input-style text-gray-400`}
+              className={`input-style pl-8`} 
               value={watch('desiredDate')}
               onChange={(e) => prodSetValue('desiredDate', e.value)}
               placeholder="Desire to Have"
@@ -474,15 +470,18 @@ function QuotationForm() {
           </div>
 
 
-          <div className="flex flex-col mr-0 md:mr-7">
+
+          <div className="flex flex-col mr-0 md:mr-7 relative">
+            <span className="absolute right-3 top-[57%] transform -translate-y-1/2 text-[#A4A4A4] ">$</span>
             <input
-              className="input-style"
+              className="input-style pl-8"
               type="number"
               {...prodRegister("rushFee", { required: "Rush Fee is Required" })}
               placeholder="Rush Fee"
             />
             <p className="error">{prodErrors.rushFee?.message}</p>
           </div>
+
           
           <div className="flex flex-col mr-0 md:mr-7">
             <DynamicDropdown2

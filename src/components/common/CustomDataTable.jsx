@@ -86,7 +86,7 @@ function CustomDataTable({
           className="bg-transparent border-none cursor-pointer disabled:opacity-50"
         >
           <img
-            src=" ./asset/images/icon/left-arrow-icon.png"
+            src=" ./images/icon/left-arrow-icon.png"
             alt="left-arrow"
           />
         </button>
@@ -100,7 +100,7 @@ function CustomDataTable({
           className="bg-transparent border-none cursor-pointer disabled:opacity-50"
         >
           <img
-            src=" ./asset/images/icon/right-arrow-icon.png"
+            src=" ./images/icon/right-arrow-icon.png"
             alt="right-arrow"
           />
         </button>
@@ -177,11 +177,11 @@ function CustomDataTable({
   const paginatedCustomers = customers.slice(first, first + rows);
 
   return (
-    <div>
-      <div className="shadow-custom-shadow mt-6 md:mt-14 bg-white px-4 md:px-8  font-poppins rounded-xl">
+    <div className="mb-2 border-2 border-transparent">
+      <div className="shadow-custom-shadow mt-6 md:mt-14 bg-white px-4 md:px-8 font-poppins rounded-xl">
         <div className="">
           {header}
-          <div className="card">
+          <div className="card mb-16 pb-4">
             <DataTable
               value={paginatedCustomers}
               paginator={false}

@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEmail } from '../ContextApi';
 
 function SignInPage() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const navigate =  useNavigate()
+  const { setUserEmail } = useEmail();
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -14,9 +17,11 @@ function SignInPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Username:", username);
+    console.log("Email:", email);
     console.log("Password:", password);
-    setUsername("");
+    setUserEmail(email)
+    navigate('/leadform')
+    setEmail("");
     setPassword("");
   };
 
@@ -44,7 +49,7 @@ function SignInPage() {
       <div className=" w-full  sm:w-2/4 flex flex-col  h-screen flex justify-evenly items-center mt-6">
         <div className="w-3/5 flex flex-col justify-center items-center">
           <div>
-            <img src="./asset/images/form-logo.jfif" alt="form-logo" />
+            <img src="./images/form-logo.jfif" alt="form-logo" />
           </div>
           <h2 style={{ color: "#3B3F8B" }} className="text-2xl font-bold">
             Sign in
@@ -56,10 +61,10 @@ function SignInPage() {
             <input
               className="bg-[#F5F5F5] rounded-2xl mt-5 px-4 focus:outline-none focus:border-red-700 focus:ring-1"
               style={{ width: "100%", height: "50px" }}
-              type="text"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Username/Email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email"
               required
             />
             <span className="password-span">
@@ -77,7 +82,7 @@ function SignInPage() {
               </span>
             </span>
 
-            <Link to='/leadform'><button className="button-style font-poppins">Proceed</button></Link>
+            <button className="button-style font-poppins">Proceed</button>
           </form>
         </div>
         <p className="mt-20 px-8 text-center text-gray-400 font-poppins">
