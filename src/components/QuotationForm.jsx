@@ -195,7 +195,6 @@ function QuotationForm() {
             <div className="flex justify-start flex-wrap">
               <div className="flex flex-col !w-full !md:w-full mt-2  mr-0">
                 <DynamicDropdown
-                  className="outline-none hover:outline-none"
                   name="selectProduct"
                   options={dropdownOptions}
                   control={quoteControl}
@@ -366,7 +365,7 @@ function QuotationForm() {
           <table className="w-full text-left table-auto min-w-max text-center font-poppins">
             <thead className="bg-[#3B3F8B] text-white ">
               <tr>
-                <th className="p-4 ">
+                <th className="p-4">
                   <p className="block text-sm font-normal leading-none">Sr</p>
                 </th>
                 <th className="p-4 ">
@@ -415,7 +414,7 @@ function QuotationForm() {
                   <td className="p-4 flex justify-center items-center">
                     <button
                       type="submit"
-                      className="block text-sm"
+                      className="block text-sm text-black mt-[1px]"
                       onClick={() => handleDelete(index)}
                     >
                       <AiOutlineClose className="text-[17px] font-extrabold"/>

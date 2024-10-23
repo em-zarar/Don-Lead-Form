@@ -64,15 +64,10 @@ input[type="number"]::-webkit-outer-spin-button {
   margin: 4px 0px;
   color: rgb(148 163 184);
 }
-.p-dropdown-items ul li:hover {
+.p-dropdown-item:hover {
   outline: none;
 }
-.p-dropdown-items ul:hover {
-  outline: none;
-}
-.p-dropdown-items ul li span:hover {
-  outline: none;
-}
+
 .p-dropdown-items li:hover {
   color: rgb(0, 89, 214);
 }
@@ -146,7 +141,6 @@ margin-left: 5px;
 font-size: 14px;
 }
 .product-p p{
-  margin-top: 2px;
   margin-left: 5px;
   font-size: 17px;
   font-weight: 600;
@@ -163,4 +157,7 @@ font-size: 14px;
 }
 .p-column-header-content{
   width: 120px;
+}
+.p-datepicker-month{
+  margin-right: 5px;
 }
